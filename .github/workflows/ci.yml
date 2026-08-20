@@ -43,11 +43,21 @@ jobs:
           cache: 'yarn'
           cache-dependency-path: 'liff-frontend/yarn.lock'
 
-      - name: Run Frontend Build
+      - name: Run Frontend Lint & Format Check
         run: |
           if [ -d "liff-frontend" ] && [ -f "liff-frontend/package.json" ]; then
             cd liff-frontend
             yarn install
+            yarn lint
+            yarn format:check
+          else
+            echo "Frontend directory or package.json not present yet, skipping."
+          fi
+
+      - name: Run Frontend Build
+        run: |
+          if [ -d "liff-frontend" ] && [ -f "liff-frontend/package.json" ]; then
+            cd liff-frontend
             yarn build
           else
             echo "Frontend directory or package.json not present yet, skipping."
