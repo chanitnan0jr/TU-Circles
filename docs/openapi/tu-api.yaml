@@ -1,0 +1,97 @@
+openapi: 3.0.3
+info:
+  title: TU Rest API Contract (TU Circles)
+  version: 1.0.0
+  description: OpenAPI specification strictly reflecting confirmed fields from TU REST API.
+paths:
+  /api/v1/profile/student:
+    get:
+      summary: Get Student Profile
+      parameters:
+        - name: Application-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+  /api/v1/profile/employee:
+    get:
+      summary: Get Employee Profile
+      parameters:
+        - name: Application-Key
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeProfile'
+
+components:
+  schemas:
+    StudentProfile:
+      type: object
+      required:
+        - studentid
+        - displayname_th
+        - displayname_en
+        - type
+        - statsid
+        - statusname
+        - level_name
+        - faculty
+        - department
+      properties:
+        studentid:
+          type: string
+        displayname_th:
+          type: string
+        displayname_en:
+          type: string
+        type:
+          type: string
+        statsid:
+          type: string
+        statusname:
+          type: string
+        level_name:
+          type: string
+        faculty:
+          type: string
+        department:
+          type: string
+        # TODO: unconfirmed additional fields (e.g. email, phone, gpa) - do not invent fields until verified with real API sample
+
+    EmployeeProfile:
+      type: object
+      required:
+        - username
+        - displayname_th
+        - displayname_en
+        - type
+        - employee_type
+        - organization
+      properties:
+        username:
+          type: string
+        displayname_th:
+          type: string
+        displayname_en:
+          type: string
+        type:
+          type: string
+        employee_type:
+          type: string
+        organization:
+          type: string
+        # TODO: unconfirmed additional fields - do not invent fields until verified with real API sample

@@ -1,0 +1,54 @@
+name: CI Workflow
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  backend-build:
+    name: Backend Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Run Backend Tests & Build
+        run: |
+          if [ -d "backend" ] && [ -f "backend/mvnw" ]; then
+            cd backend
+            chmod +x mvnw
+            ./mvnw clean verify
+          else
+            echo "Backend maven wrapper not present yet, skipping."
+          fi
+
+  frontend-build:
+    name: Frontend Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+          cache-dependency-path: 'liff-frontend/yarn.lock'
+
+      - name: Run Frontend Build
+        run: |
+          if [ -d "liff-frontend" ] && [ -f "liff-frontend/package.json" ]; then
+            cd liff-frontend
+            yarn install
+            yarn build
+          else
+            echo "Frontend directory or package.json not present yet, skipping."
+          fi
